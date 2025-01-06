@@ -9,12 +9,32 @@ import Time from "../Svgs/Time";
 import Wind from "../Svgs/Wind";
 import {useSelector} from "react-redux";
 import Moment from "react-moment";
-
+import Sunny from "../Svgs/Sunny";
+import Cloudy from "../Svgs/Cloudy";
+import Thunder from "../Svgs/Thunder";
+import Rainy from "../Svgs/Rainy";
 
 export const Weather = () => {
 
     const weather = useSelector(({weather}) => weather)
-
+    const displayIcon = () => {
+        const defaultWidth = '200px';
+        const defaultHeight = '200px';
+        const number = weather.weather.icon.substring(0, 2)
+        switch (number) {
+            case '01':
+                return <Sunny width={defaultWidth} height={defaultHeight}/>
+            case '03':
+            case '04':
+                return <Cloudy width={defaultWidth} height={defaultHeight}/>
+            case '10':
+                return <Rainy width={defaultWidth} height={defaultHeight}/>
+            case '11':
+                return <Thunder width={defaultWidth} height={defaultHeight}/>
+            default:
+                return <img src={`https://openweathermap.org/img/wn/${weather.weather.icon}@2x.png`} alt=""/>
+        }
+    }
     return (
         <>
             <Card className={styles.container}>
@@ -30,7 +50,7 @@ export const Weather = () => {
                     </Card.Title>
                     <Card.Text as={'div'} className={styles.weather_infos}>
                         <div>
-                            <DefaultWeather width={'250px'} height={'250px'}/>
+                        {displayIcon()}
                         </div>
                         <div className={styles.temperature}>
                             <div>{weather.main.feels_like}° C</div>
